@@ -2,36 +2,35 @@ const { Schema, model } = require('mongoose');
 
 const ThoughtSchema = new Schema({
     thoughtText: {
-        type: String
-    },
-    email: {
-        type: String
+        type: String,
+        required: true,
+        min: 1,
+        max: 280,
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
-    thoughts: [
+    username: {
+        type: String,
+        required: true,
+    },
+
+    reactions: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Thought'
-        }
-    ],
-    friends: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'Reaction'
         }
     ]
 });
 
 // get total count of comments and replies on retrieval
-UserSchema.virtual('friendCount').get(function () {
-    return this.friends.length;
+UserSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
 });
 
 // create the Pizza model using the PizzaSchema
-const User = model('User', UserSchema);
+const Thought = model('Thought', ThoughtSchema);
 
 // export the Pizza model
-module.exports = User;
+module.exports = Thought;
